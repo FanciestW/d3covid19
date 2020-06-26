@@ -3,6 +3,7 @@
   <head>
     <title>COVID-19 D3</title>
     <link rel="stylesheet" href="./style.css" />
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css" />
   </head>
 
   <body>
@@ -11,8 +12,10 @@
         <h1>COVID-19 Cases In The United States</h1>
         <h2 id="current-cases-text"></h2>
         <p id="current-cases-date"></p>
+        <div class="ct-chart ct-perfect-fourth"></div>
       </div>
     </div>
+    <script src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
     <script src="https://d3js.org/d3.v5.min.js"></script>
     <script src="./daily.json" type="application/json" id="dailyJSON"></script>
     <script src="./index.js"></script>
