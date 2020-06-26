@@ -18,9 +18,9 @@ function afterRequestLoads() {
   // Using Chartist.js
   var data = {
     // A labels array that can contain any sort of values
-    labels: covidData.map((e) => e.date),
+    labels: covidData.map((e) => e.date).reverse(),
     // Our series array that contains series objects or in this case series data arrays
-    series: [covidData.map((e) => e.positiveIncrease)],
+    series: [covidData.map((e) => e.positiveIncrease).reverse()],
   };
 
   // Create a new line chart object where as first parameter we pass in a selector
