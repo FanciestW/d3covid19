@@ -1,3 +1,17 @@
+function graphLine(data) {
+  let margin = { top: 10, right: 30, bottom: 30, left: 60 };
+  let width = 560 - margin.left - margin.right;
+  let height = 560 - margin.top - margin.bottom;
+
+  let svg = d3
+    .select('.d3-line')
+    .append('svg')
+    .attr('width', width + margin.left + margin.right)
+    .attr('height', height + margin.top + margin.bottom)
+    .append('g')
+    .attr('transform', `translate(${margin.left}, ${margin.top})`);
+}
+
 function afterRequestLoads() {
   const covidData = JSON.parse(this.response);
   d3.select('#current-cases-text').html(`${d3.format(',')(covidData[0].positive)}`);
@@ -14,19 +28,6 @@ function afterRequestLoads() {
     return element.positive;
   });
   console.log(arrPositive);
-
-  // Using Chartist.js
-  var data = {
-    // A labels array that can contain any sort of values
-    labels: covidData.map((e) => e.date).reverse(),
-    // Our series array that contains series objects or in this case series data arrays
-    series: [covidData.map((e) => e.positiveIncrease).reverse()],
-  };
-
-  // Create a new line chart object where as first parameter we pass in a selector
-  // that is resolving to our chart container element. The Second parameter
-  // is the actual data object.
-  new Chartist.Line('.ct-chart', data);
 }
 
 let request = new XMLHttpRequest();
