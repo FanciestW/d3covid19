@@ -2,9 +2,10 @@ let covidData = [];
 
 // Button to trigger line graph
 function lineGraph() {
-  let data = covidData.map(function(element) {
+  let data = covidData.map(function (element) {
+    const dateStr = element.date.toString();
     return {
-      x: element.date,
+      x: `${dateStr.substring(4, 6)}/${dateStr.substring(6, 8)}/${dateStr.substring(0, 4)}`,
       y: element.positiveIncrease,
     };
   });
@@ -46,7 +47,7 @@ function graphLine(data) {
     })
     .curve(d3.curveMonotoneX);
 
-  d3.selectAll("svg > *").remove();
+  d3.selectAll('svg > *').remove();
 
   let svg = d3
     .select('.graph')
