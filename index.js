@@ -60,12 +60,12 @@ function graphLine(data) {
     })
     .attr('r', 5)
     .on('mouseover', function (d, i) {
-      document.getElementById('current-cases-text').innerHTML = d;
+      d3.select('#current-cases-text').html(`${d3.format(',')(d)}`);
       document.getElementById('current-cases-date').innerHTML = xData[i];
       this.attr('class', 'focus');
     })
     .on('mouseout', function (d, i) {
-      document.getElementById('current-cases-text').innerHTML = yData[data.length - 1];
+      d3.select('#current-cases-text').html(`${d3.format(',')(yData[data.length - 1])}`);
       document.getElementById('current-cases-date').innerHTML = xData[data.length - 1];
     });
 }
