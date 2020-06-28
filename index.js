@@ -1,14 +1,32 @@
 let covidData = [];
+let shownGraph = 'positive';
+const graphTypes = ['positive', 'positiveIncrease'];
 
 // Button to trigger line graph
 function lineGraph() {
+  const graphTypesIndex = graphTypes.findIndex(function (e) {
+    return e === shownGraph;
+  });
+  shownGraph = graphTypesIndex >= graphTypes.length - 1 ? graphTypes[0] : graphTypes[graphTypesIndex + 1];
+  console.log({ graphTypesIndex, shownGraph });
   let data = covidData.map(function (element) {
     const dateStr = element.date.toString();
     return {
       x: `${dateStr.substring(4, 6)}/${dateStr.substring(6, 8)}/${dateStr.substring(0, 4)}`,
-      y: element.positiveIncrease,
+      y: element[shownGraph],
     };
   });
+
+  let graphTitle = 'Untitled';
+  switch (shownGraph) {
+    case 'positive':
+      graphTitle = 'United States Total Positive Cases Over Time';
+      break;
+    case 'positiveIncrease':
+      graphTitle = 'United States Daily Change In Positive Cases Over Time';
+      break;
+  }
+  document.getElementById('graph-title').innerHTML = graphTitle;
   graphLine(data.reverse());
 }
 
@@ -18,7 +36,6 @@ function lineGraph() {
  * { x: '12/12/2020', y: '1200' }
  */
 function graphLine(data) {
-  console.log({ data });
   let margin = { top: 10, right: 30, bottom: 30, left: 60 };
   let width = window.innerWidth - margin.left - margin.right;
   let height = 600 - margin.top - margin.bottom;
