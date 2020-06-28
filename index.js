@@ -52,7 +52,7 @@ function graphLine(data) {
     .enter()
     .append('circle')
     .attr('class', 'dot')
-    .attr('cx', function (d, i) {
+    .attr('cx', function (_d, i) {
       return xScale(i);
     })
     .attr('cy', function (d) {
@@ -64,7 +64,7 @@ function graphLine(data) {
       document.getElementById('current-cases-date').innerHTML = xData[i];
       this.attr('class', 'focus');
     })
-    .on('mouseout', function (d, i) {
+    .on('mouseout', function () {
       d3.select('#current-cases-text').html(`${d3.format(',')(yData[data.length - 1])}`);
       document.getElementById('current-cases-date').innerHTML = xData[data.length - 1];
     });
