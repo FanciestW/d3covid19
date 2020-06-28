@@ -1,9 +1,18 @@
+/**
+ * Graphs the data that is given
+ * @param {Array} data An array of objects that include x and y data:
+ * { x: '12/12/2020', y: '1200' }
+ */
 function graphLine(data) {
+  console.log({ data });
   let margin = { top: 10, right: 30, bottom: 30, left: 60 };
   let width = window.innerWidth - margin.left - margin.right;
   let height = 600 - margin.top - margin.bottom;
 
   const numOfDataPoints = data.length;
+
+  const xData = data.map((e) => e.x);
+  const yData = data.map((e) => e.y);
 
   let xScale = d3
     .scaleLinear()
@@ -11,7 +20,7 @@ function graphLine(data) {
     .range([0, width]);
   let yScale = d3
     .scalePow()
-    .domain([0, Math.max(...data) + Math.min(...data)])
+    .domain([0, Math.max(...yData) + Math.min(...yData)])
     .range([height, 0]);
 
   let line = d3
@@ -35,11 +44,11 @@ function graphLine(data) {
   svg.append('g').attr('class', 'x-axis').attr('transform', `translate(0,${height})`).call(d3.axisBottom(xScale));
   svg.append('g').attr('class', 'y-axis').call(d3.axisLeft(yScale));
 
-  svg.append('path').datum(data).attr('class', 'line').attr('d', line);
+  svg.append('path').datum(yData).attr('class', 'line').attr('d', line);
 
   svg
     .selectAll('.dot')
-    .data(data)
+    .data(yData)
     .enter()
     .append('circle')
     .attr('class', 'dot')
@@ -50,11 +59,15 @@ function graphLine(data) {
       return yScale(d);
     })
     .attr('r', 5)
-    .on('mouseover', function (a, b, c) {
-      console.log(a);
+    .on('mouseover', function (d, i) {
+      document.getElementById('current-cases-text').innerHTML = d;
+      document.getElementById('current-cases-date').innerHTML = xData[i];
       this.attr('class', 'focus');
     })
-    .on('mouseout', function () {});
+    .on('mouseout', function (d, i) {
+      document.getElementById('current-cases-text').innerHTML = yData[data.length - 1];
+      document.getElementById('current-cases-date').innerHTML = xData[data.length - 1];
+    });
 }
 
 function afterRequestLoads() {
@@ -74,7 +87,17 @@ function afterRequestLoads() {
   });
   console.log(arrPositive);
 
-  graphLine(arrPositive.reverse());
+  graphLine(
+    covidData
+      .map(function (e) {
+        const dateStr = e.date.toString();
+        return {
+          x: `${dateStr.substring(4, 6)}/${dateStr.substring(6, 8)}/${dateStr.substring(0, 4)}`,
+          y: e.positive,
+        };
+      })
+      .reverse()
+  );
 }
 
 let request = new XMLHttpRequest();
