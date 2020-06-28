@@ -1,6 +1,19 @@
+let covidData = [];
+
+// Button to trigger line graph
+function lineGraph() {
+  let data = covidData.map(function(element) {
+    return {
+      x: element.date,
+      y: element.positiveIncrease,
+    };
+  });
+  graphLine(data.reverse());
+}
+
 /**
  * Graphs the data that is given
- * @param {Array} data An array of objects that include x and y data:
+ * @param {Array} data An array of objects that includes x and y data:
  * { x: '12/12/2020', y: '1200' }
  */
 function graphLine(data) {
@@ -33,9 +46,10 @@ function graphLine(data) {
     })
     .curve(d3.curveMonotoneX);
 
+  d3.selectAll("svg > *").remove();
+
   let svg = d3
-    .select('.d3-line')
-    .append('svg')
+    .select('.graph')
     .attr('width', width + margin.left + margin.right)
     .attr('height', height + margin.top + margin.bottom)
     .append('g')
@@ -71,7 +85,7 @@ function graphLine(data) {
 }
 
 function afterRequestLoads() {
-  const covidData = JSON.parse(this.response);
+  covidData = JSON.parse(this.response);
   d3.select('#current-cases-text').html(`${d3.format(',')(covidData[0].positive)}`);
   const date = covidData[0].date.toString();
   const formattedDate = `${date.substring(4, 6)}/${date.substring(6, 8)}/${date.substring(0, 4)}`;
