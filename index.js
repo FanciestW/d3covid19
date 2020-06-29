@@ -27,6 +27,10 @@ function lineGraph() {
       break;
   }
   document.getElementById('graph-title').innerHTML = graphTitle;
+  d3.select('#current-cases-text').html(`${d3.format(',')(covidData[0][shownGraph])}`);
+  const dateStr = covidData[0].date.toString();
+  const formatedDateStr = `${dateStr.substring(4, 6)}/${dateStr.substring(6, 8)}/${dateStr.substring(0, 4)}`;
+  d3.select('#current-cases-date').html(formatedDateStr);
   graphLine(data.reverse());
 }
 
