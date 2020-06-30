@@ -2,8 +2,13 @@ let covidData = [];
 let shownGraph = 'positive';
 const graphTypes = ['positive', 'positiveIncrease'];
 
-// Button to trigger line graph
-function lineGraph() {
+// Global margin and dimensions.
+const margin = { top: 10, right: 30, bottom: 30, left: 60 };
+const width = window.innerWidth - margin.left - margin.right;
+const height = 600 - margin.top - margin.bottom;
+
+// Button to trigger line graph.
+function prepareLine() {
   const graphTypesIndex = graphTypes.findIndex(function (e) {
     return e === shownGraph;
   });
@@ -40,10 +45,6 @@ function lineGraph() {
  * { x: '12/12/2020', y: '1200' }
  */
 function graphLine(data) {
-  let margin = { top: 10, right: 30, bottom: 30, left: 60 };
-  let width = window.innerWidth - margin.left - margin.right;
-  let height = 600 - margin.top - margin.bottom;
-
   const numOfDataPoints = data.length;
 
   const xData = data.map((e) => e.x);
@@ -104,6 +105,49 @@ function graphLine(data) {
       d3.select('#current-cases-text').html(`${d3.format(',')(yData[data.length - 1])}`);
       document.getElementById('current-cases-date').innerHTML = xData[data.length - 1];
     });
+}
+
+// Button to trigger bar graph.
+function prepareBar() {
+  const firstSeven = covidData.slice(0, 7);
+  const data = firstSeven.map(function (element) {
+    return {
+      x: element.date.toString(),
+      y: element.deathIncrease,
+    }
+  });
+
+  console.log(data);
+  graphBar(data);
+}
+
+function graphBar(data) {
+  d3.selectAll('svg > *').remove();
+  const xScale = d3.scaleLinear()
+    .domain([0, 7])
+    .range([0, width]);
+  const yScale = d3.scaleBand()
+    .domain([0, 3000])
+    .rangeRound([0, height])
+    .padding(0.2);
+  const svg = d3.select(".graph")
+    .attr('width', width + margin.left + margin.right)
+    .attr('height', height + margin.top + margin.bottom)
+    .selectAll("rect")
+    .data(data)
+    .enter()
+    .append("rect")
+      .attr("y", d => yScale(d.y))
+      .attr("width", (d, i) => xScale(i))
+      .attr("height", yScale.bandwidth())
+  const xAxis = d3
+    .axisTop(xScale);
+  const xAxisDraw = svg.append("svg")
+    .attr("class", "xAxis")
+    .call(xAxis);
+  const yAxis = d3.axisLeft(yScale)
+  const yAxisDraw = svg.append("svg")
+    .call(yAxis);
 }
 
 function afterRequestLoads() {
