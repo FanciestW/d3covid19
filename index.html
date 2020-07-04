@@ -12,12 +12,14 @@
         <h1>COVID-19 Cases In The United States</h1>
         <h2 id="current-cases-text"></h2>
         <p id="current-cases-date"></p>
-        <div class="ct-chart ct-perfect-fourth"></div>
+        <button onclick="prepareLine()">Toggle Line Graph</button>
+        <button onclick="prepareBar()">Toggle Bar Graph</button>
+        <h3 id="graph-title">United States Total Positive Cases Over Time</h3>
+        <svg class="graph"></svg>
       </div>
     </div>
     <script src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
     <script src="https://d3js.org/d3.v5.min.js"></script>
-    <script src="./daily.json" type="application/json" id="dailyJSON"></script>
     <script src="./index.js"></script>
   </body>
 </html>
